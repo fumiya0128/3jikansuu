@@ -1,0 +1,63 @@
+--track0:始点,-2000,2000,0
+--track1:進捗,0,2000,100,1
+--track2:密度,1,500,50
+--track3:接線位置,-1000,1000,0,0.1
+--check0:傾き,0;
+--dialog:abcd,local abcd={1,0,-4,0};x比率,local xscale=200;y比率,local yscale=80;接線色/col,local scoler="0xffffff";接線幅,local haba=5;接線表示/chk,local kata=0;太さ一定(0-6),local futo=0;中心位置/chk,local center=0;
+
+for i = (obj.track0-obj.track1),obj.track0 do
+  local xx=(obj.track0-xscale*(obj.track0-i)/obj.track2)
+  local yy =-1*yscale*(abcd[1]*(xx/xscale)^3+abcd[2]*(xx/xscale)^2+abcd[3]*(xx/xscale)+abcd[4]) 
+obj.effect()
+if obj.check0 then
+if (futo==1) then --小さくなる
+  obj.draw(xx,yy,0,1-((obj.track0-i)/obj.track1),1,0,0,-math.deg(math.atan((3*abcd[1]*(xx/xscale)^2+2*abcd[2]*xx/xscale+abcd[3])*yscale/xscale)))
+elseif (futo==2) then --大きくなる
+  obj.draw(xx,yy,0,((obj.track0-i)/obj.track1),1,0,0,-math.deg(math.atan((3*abcd[1]*(xx/xscale)^2+2*abcd[2]*xx/xscale+abcd[3])*yscale/xscale)))
+elseif (futo==3) then --両端a
+  obj.draw(xx,yy,0,1-math.abs(1+(i-obj.track0)*2/obj.track1),1,0,0,-math.deg(math.atan((3*abcd[1]*(xx/xscale)^2+2*abcd[2]*xx/xscale+abcd[3])*yscale/xscale)))
+elseif (futo==4) then --小さくなる滑らか
+  obj.draw(xx,yy,0,1-((obj.track0-i)/obj.track1)^2,1,0,0,-math.deg(math.atan((3*abcd[1]*(xx/xscale)^2+2*abcd[2]*xx/xscale+abcd[3])*yscale/xscale)))
+elseif (futo==5) then --大きくなる滑らか
+  obj.draw(xx,yy,0,1-(1-((obj.track0-i)/obj.track1))^2,1,0,0,-math.deg(math.atan((3*abcd[1]*(xx/xscale)^2+2*abcd[2]*xx/xscale+abcd[3])*yscale/xscale)))
+elseif (futo==6) then --両端滑らか
+  obj.draw(xx,yy,0,1-(math.abs(1+(i-obj.track0)*2/obj.track1))^2,1,0,0,-math.deg(math.atan((3*abcd[1]*(xx/xscale)^2+2*abcd[2]*xx/xscale+abcd[3])*yscale/xscale)))
+elseif (futo==7) then --小さくなる急
+  obj.draw(xx,yy,0,(1-((obj.track0-i)/obj.track1))^2,1,0,0,-math.deg(math.atan((3*abcd[1]*(xx/xscale)^2+2*abcd[2]*xx/xscale+abcd[3])*yscale/xscale)))
+elseif (futo==8) then --大きくなる急
+  obj.draw(xx,yy,0,((obj.track0-i)/obj.track1)^2,1,0,0,-math.deg(math.atan((3*abcd[1]*(xx/xscale)^2+2*abcd[2]*xx/xscale+abcd[3])*yscale/xscale)))
+elseif (futo==9) then --両端急
+  obj.draw(xx,yy,0,(1-math.abs(1+(i-obj.track0)*2/obj.track1))^2,1,0,0,-math.deg(math.atan((3*abcd[1]*(xx/xscale)^2+2*abcd[2]*xx/xscale+abcd[3])*yscale/xscale)))
+else --均等
+  obj.draw(xx,yy,0,1,1,0,0,-math.deg(math.atan((3*abcd[1]*(xx/xscale)^2+2*abcd[2]*xx/xscale+abcd[3])*yscale/xscale)))
+end
+else
+  if (futo==1) then
+  obj.draw(xx,yy,0,1+(i/obj.track1))
+elseif (futo==2) then
+  obj.draw(xx,yy,0,((i-obj.track0)/obj.track1))
+elseif (futo==3) then
+  obj.draw(xx,yy,0,1-math.abs(1+(i-obj.track0)*2/obj.track1))
+elseif (futo==4) then
+  obj.draw(xx,yy,0,(1+(i/obj.track1))^2)
+elseif (futo==5) then
+  obj.draw(xx,yy,0,((i-obj.track0)/obj.track1)^2)
+elseif (futo==6) then
+  obj.draw(xx,yy,0,1-(math.abs(1+(i-obj.track0)*2/obj.track1))^2)
+elseif (futo==7) then
+  obj.draw(xx,yy,0,((i-obj.track0)/obj.track1)^2)
+elseif (futo==8) then
+  obj.draw(xx,yy,0,(1+(i/obj.track1))^2)
+elseif (futo==9) then
+  obj.draw(xx,yy,0,(1-math.abs(1+(i-obj.track0)*2/obj.track1))^2)
+else 
+  obj.draw(xx,yy)
+end
+end
+end
+
+if (kata==1) then
+obj.load("figure","背景",scoler)
+obj.effect("斜めクリッピング","中心X",(obj.track3),"中心Y",-1*yscale*(abcd[1]*(obj.track3/xscale)^3+abcd[2]*(obj.track3/xscale)^2+abcd[3]*obj.track3/xscale+abcd[4]),"角度",-math.deg(math.atan((3*abcd[1]*(obj.track3/xscale)^2+2*abcd[2]*obj.track3/xscale+abcd[3])*yscale/xscale)),"幅",haba)
+obj.draw()
+end
